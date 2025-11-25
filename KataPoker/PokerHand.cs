@@ -8,25 +8,39 @@ public class PokerHand(List<Card> cards)
 
     public bool HasThreeOfAKind() => CheckForAGroup(3);
 
-    private bool CheckForAGroup(int groupSize)
+    private bool CheckForAGroup(int groupSize, int groupOccurences = 1)
         => Cards.GroupBy(card => card.Rank)
-                .Count(group => group.Count() == groupSize) ==
-           1;
+               .Count(group => group.Count() == groupSize) ==
+           groupOccurences;
+
     public bool HasFourOfAKind() => CheckForAGroup(4);
+
     public bool HasTwoPairs()
-        => Cards.GroupBy(card => card.Rank)
-                .Count(group => group.Count() == 2) ==
-           2;
+        => CheckForAGroup(2, 2);
+
     public bool HasFullHouse()
         => HasAPair() && HasThreeOfAKind();
+
     public bool HasASimpleFlush()
         => Cards.GroupBy(g => g.Color).Any(g => g.Count() == 5);
+
     public bool HasSimpleStraight()
-        => HasStraight()
-            && !HasASimpleFlush();
+        => HasStraight() && !HasASimpleFlush();
+
     private bool HasStraight()
-        => Cards.GroupBy(r => r.Rank).Count(r => r.Count() == 1) == 5
-           && GetMaxValue() - GetMinValue() == 4;
+    {
+        var first = Cards.Select(card => (int)card.Rank).Order().ToList();
+        var second = first.Select(cardValue => cardValue == 1 ? (int)Rank.King + 1 : cardValue).Order().ToList();
+        
+        return IsDistinctRank() && (CalculateRankRange(first) || CalculateRankRange(second));
+    }
+
+    private static bool CalculateRankRange(List<int> list)
+    {
+        return list.Max() - list.Min() == 4;
+    }
+
+    private bool IsDistinctRank() => Cards.DistinctBy(r => r.Rank).Count() == 5;
 
     private int GetMaxValue()
     {
@@ -37,8 +51,9 @@ public class PokerHand(List<Card> cards)
 
     private int GetMinValue()
     {
+        var cards = Cards;
         if (Cards.Exists(card => card.Rank == Rank.King) && Cards.Exists(card => card.Rank == Rank.Ace))
-            return (int)Rank.Ten;
-        return (int)Cards.Min(r => r.Rank);
+            cards = Cards.Where(card => card.Rank != Rank.Ace).ToList();
+        return (int)cards.Min(r => r.Rank);
     }
 }

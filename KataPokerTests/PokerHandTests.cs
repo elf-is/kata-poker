@@ -91,6 +91,14 @@ public class Tests
         new Card(color: Color.Club, rank: Rank.King),
         new Card(color: Color.Club, rank: Rank.Ace)
     ]);
+    
+    private readonly PokerHand _handWithAKindOfStraigthEndingWithtAce = new([
+        new Card(color: Color.Club, rank: Rank.Nine),
+        new Card(color: Color.Heart, rank: Rank.Jack),
+        new Card(color: Color.Club, rank: Rank.Queen),
+        new Card(color: Color.Club, rank: Rank.King),
+        new Card(color: Color.Club, rank: Rank.Ace)
+    ]);
 
     [SetUp]
     public void Setup()
@@ -134,6 +142,7 @@ public class Tests
 
         Assert.IsFalse(hasThreeOfAKind);
     }
+
     [Test]
     public void GivenAHandWithFourOfAKindWhenCheckingForFourOfAKindThenReturnTrue()
     {
@@ -141,6 +150,7 @@ public class Tests
 
         Assert.IsTrue(hasFourOfAKind);
     }
+
     [Test]
     public void GivenAHandWithoutFourOfAKindWhenCheckingForFourOfAKindThenReturnFalse()
     {
@@ -176,36 +186,42 @@ public class Tests
         bool hasAFullHouse = _handWithFullHouse.HasFullHouse();
         Assert.IsTrue(hasAFullHouse);
     }
+
     [Test]
     public void GivenAHandWithHighHandWhenCheckingForAFullHouseReturnFalse()
     {
         bool hasAFullHouse = _handWithHighCard.HasFullHouse();
         Assert.IsFalse(hasAFullHouse);
     }
+
     [Test]
     public void GivenAHandWithSimpleFlushWhenCheckingForASimpleFlushReturnTrue()
     {
         bool hasASimpleFlush = _handWithSimpleFlush.HasASimpleFlush();
         Assert.IsTrue(hasASimpleFlush);
     }
+
     [Test]
     public void GivenAHandWithoutSimpleFlushWhenCheckingForASimpleFlushReturnFalse()
     {
         bool hasASimpleFlush = _handWithHighCard.HasASimpleFlush();
         Assert.IsFalse(hasASimpleFlush);
     }
+
     [Test]
     public void GivenAHandWithAStraightWhenCheckingForAStraightReturnTrue()
     {
         bool hasAStraight = _handWithStraight.HasSimpleStraight();
         Assert.IsTrue(hasAStraight);
     }
+
     [Test]
     public void GivenAHandWithoutAStraightWhenCheckingForAStraightReturnFalse()
     {
         bool hasAStraight = _handWithHighCard.HasSimpleStraight();
         Assert.IsFalse(hasAStraight);
     }
+
     [Test]
     public void GivenAHandWithPseudoStraightWhenCheckingForStraightReturnFalse()
     {
@@ -225,5 +241,12 @@ public class Tests
     {
         bool hasAStraight = _handWithStraigthEndingWithAce.HasSimpleStraight();
         Assert.IsTrue(hasAStraight);
+    }
+    
+    [Test]
+    public void GivenAHandWithAKindOfStraightEndedWithAceWhenCheckingForAStraightReturnFalse()
+    {
+        bool hasAStraight = _handWithAKindOfStraigthEndingWithtAce.HasSimpleStraight();
+        Assert.IsFalse(hasAStraight);
     }
 }
