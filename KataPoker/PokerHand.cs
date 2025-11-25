@@ -31,29 +31,31 @@ public class PokerHand(List<Card> cards)
     {
         var first = Cards.Select(card => (int)card.Rank).Order().ToList();
         var second = first.Select(cardValue => cardValue == 1 ? (int)Rank.King + 1 : cardValue).Order().ToList();
-        
+
         return IsDistinctRank() && (CalculateRankRange(first) || CalculateRankRange(second));
     }
 
     private static bool CalculateRankRange(List<int> list)
-    {
-        return list.Max() - list.Min() == 4;
-    }
+    => list.Max() - list.Min() == 4;
 
     private bool IsDistinctRank() => Cards.DistinctBy(r => r.Rank).Count() == 5;
 
-    private int GetMaxValue()
-    {
-        if (Cards.Exists(card => card.Rank == Rank.King) && Cards.Exists(card => card.Rank == Rank.Ace))
-            return (int)Rank.King + 1;
-        return (int)Cards.Max(r => r.Rank);
-    }
+    public bool HasStraightFlush()
+    => HasASimpleFlush() && HasStraight();
 
-    private int GetMinValue()
-    {
-        var cards = Cards;
-        if (Cards.Exists(card => card.Rank == Rank.King) && Cards.Exists(card => card.Rank == Rank.Ace))
-            cards = Cards.Where(card => card.Rank != Rank.Ace).ToList();
-        return (int)cards.Min(r => r.Rank);
-    }
+    public bool HasRoyalFLush()
+    => HasStraightFlush() && HasAce() && HasKing();
+    
+    public bool HasHighCard() => !HasAPair() &&
+                                 !HasTwoPairs() &&
+                                 !HasThreeOfAKind() &&
+                                 !HasFourOfAKind() &&
+                                 !HasStraightFlush() &&
+                                 !HasASimpleFlush() &&
+                                 !HasStraight() &&
+                                 !HasRoyalFLush();
+    
+    private bool HasAce() => Cards.Exists(r => r.Rank == Rank.Ace);
+    
+    private bool HasKing() => Cards.Exists(r => r.Rank == Rank.King);
 }

@@ -4,7 +4,7 @@ namespace KataPokerTests;
 
 public class Tests
 {
-    private readonly PokerHand _handWithAPair = new([
+    private static readonly PokerHand HandWithAPair = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Diamond, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Two),
@@ -12,7 +12,7 @@ public class Tests
         new Card(color: Color.Spade, rank: Rank.Five)
     ]);
 
-    private readonly PokerHand _handWithHighCard = new([
+    private static readonly PokerHand HandWithHighCard = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Diamond, rank: Rank.Ten),
         new Card(color: Color.Heart, rank: Rank.Two),
@@ -20,7 +20,7 @@ public class Tests
         new Card(color: Color.Spade, rank: Rank.Five)
     ]);
 
-    private readonly PokerHand _handWithThreeOfAKind = new([
+    private static readonly PokerHand HandWithThreeOfAKind = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Diamond, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Ace),
@@ -28,7 +28,7 @@ public class Tests
         new Card(color: Color.Spade, rank: Rank.Five)
     ]);
 
-    private readonly PokerHand _handWithFourOfAKind = new([
+    private static readonly PokerHand HandWithFourOfAKind = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Ace),
         new Card(color: Color.Spade, rank: Rank.Ace),
@@ -36,7 +36,7 @@ public class Tests
         new Card(color: Color.Spade, rank: Rank.Five)
     ]);
 
-    private readonly PokerHand _handWithTwoPairs = new([
+    private static readonly PokerHand HandWithTwoPairs = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Diamond, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Two),
@@ -44,7 +44,7 @@ public class Tests
         new Card(color: Color.Spade, rank: Rank.Five)
     ]);
 
-    private readonly PokerHand _handWithFullHouse = new([
+    private static readonly PokerHand HandWithFullHouse = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Diamond, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Ace),
@@ -52,7 +52,7 @@ public class Tests
         new Card(color: Color.Diamond, rank: Rank.Two)
     ]);
 
-    private readonly PokerHand _handWithSimpleFlush = new([
+    private static readonly PokerHand HandWithSimpleFlush = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Club, rank: Rank.Two),
         new Card(color: Color.Club, rank: Rank.Eight),
@@ -60,7 +60,7 @@ public class Tests
         new Card(color: Color.Club, rank: Rank.Four)
     ]);
 
-    private readonly PokerHand _handWithStraight = new([
+    private static readonly PokerHand HandWithStraight = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Heart, rank: Rank.Five),
         new Card(color: Color.Club, rank: Rank.Three),
@@ -76,7 +76,7 @@ public class Tests
         new Card(color: Color.Club, rank: Rank.Four)
     ]);
 
-    private readonly PokerHand _handWithStraightFlush = new([
+    private static readonly PokerHand HandWithStraightFlush = new([
         new Card(color: Color.Club, rank: Rank.Ace),
         new Card(color: Color.Club, rank: Rank.Five),
         new Card(color: Color.Club, rank: Rank.Three),
@@ -99,6 +99,25 @@ public class Tests
         new Card(color: Color.Club, rank: Rank.King),
         new Card(color: Color.Club, rank: Rank.Ace)
     ]);
+    
+    private static readonly PokerHand HandWithARoyalFlush = new([
+        new Card(color: Color.Club, rank: Rank.Ten),
+        new Card(color: Color.Club, rank: Rank.Jack),
+        new Card(color: Color.Club, rank: Rank.Queen),
+        new Card(color: Color.Club, rank: Rank.King),
+        new Card(color: Color.Club, rank: Rank.Ace)
+    ]);
+    
+    [DatapointSource]
+    private PokerHand[] _hand= [HandWithAPair,
+        HandWithThreeOfAKind,
+        HandWithFourOfAKind,
+        HandWithTwoPairs,
+        HandWithFullHouse,
+        HandWithSimpleFlush,
+        HandWithStraight,
+        HandWithStraightFlush,
+        HandWithARoyalFlush];
 
     [SetUp]
     public void Setup()
@@ -108,21 +127,21 @@ public class Tests
     [Test]
     public void GivenAHandWithAPairWhenCheckingForAPairThenReturnTrue()
     {
-        bool result = _handWithAPair.HasAPair();
+        bool result = HandWithAPair.HasAPair();
         Assert.IsTrue(result);
     }
 
     [Test]
     public void GivenAHandWithoutAPairWhenCheckingForAPairThenReturnFalse()
     {
-        bool result = _handWithHighCard.HasAPair();
+        bool result = HandWithHighCard.HasAPair();
         Assert.IsFalse(result);
     }
 
     [Test]
     public void GivenAHandWithThreeOfAKindWhenCheckingForThreeOfAKindThenReturnTrue()
     {
-        bool hasThreeOfAKind = _handWithThreeOfAKind.HasThreeOfAKind();
+        bool hasThreeOfAKind = HandWithThreeOfAKind.HasThreeOfAKind();
 
         Assert.IsTrue(hasThreeOfAKind);
     }
@@ -130,7 +149,7 @@ public class Tests
     [Test]
     public void GivenAHandWithAPairWhenCheckingForThreeOfAKindThenReturnFalse()
     {
-        bool hasThreeOfAKind = _handWithAPair.HasThreeOfAKind();
+        bool hasThreeOfAKind = HandWithAPair.HasThreeOfAKind();
 
         Assert.IsFalse(hasThreeOfAKind);
     }
@@ -138,7 +157,7 @@ public class Tests
     [Test]
     public void GivenAHandWithoutThreeOfAKindWhenCheckingForThreeOfAKindThenReturnFalse()
     {
-        bool hasThreeOfAKind = _handWithHighCard.HasThreeOfAKind();
+        bool hasThreeOfAKind = HandWithHighCard.HasThreeOfAKind();
 
         Assert.IsFalse(hasThreeOfAKind);
     }
@@ -146,7 +165,7 @@ public class Tests
     [Test]
     public void GivenAHandWithFourOfAKindWhenCheckingForFourOfAKindThenReturnTrue()
     {
-        bool hasFourOfAKind = _handWithFourOfAKind.HasFourOfAKind();
+        bool hasFourOfAKind = HandWithFourOfAKind.HasFourOfAKind();
 
         Assert.IsTrue(hasFourOfAKind);
     }
@@ -154,7 +173,7 @@ public class Tests
     [Test]
     public void GivenAHandWithoutFourOfAKindWhenCheckingForFourOfAKindThenReturnFalse()
     {
-        bool hasFourOfAKind = _handWithHighCard.HasFourOfAKind();
+        bool hasFourOfAKind = HandWithHighCard.HasFourOfAKind();
 
         Assert.IsFalse(hasFourOfAKind);
     }
@@ -162,63 +181,63 @@ public class Tests
     [Test]
     public void GivenAHandWithTwoPairWhenCheckingForTwoPairThenReturnTrue()
     {
-        bool hasTwoPair = _handWithTwoPairs.HasTwoPairs();
+        bool hasTwoPair = HandWithTwoPairs.HasTwoPairs();
         Assert.IsTrue(hasTwoPair);
     }
 
     [Test]
     public void GivenAHandWithoutTwoPairWhenCheckingForTwoPairThenReturnFalse()
     {
-        bool hasTwoPair = _handWithHighCard.HasTwoPairs();
+        bool hasTwoPair = HandWithHighCard.HasTwoPairs();
         Assert.IsFalse(hasTwoPair);
     }
 
     [Test]
     public void GivenAHandWithTwoPairWhenCheckingForAPairThenReturnFalse()
     {
-        bool hasAPair = _handWithTwoPairs.HasAPair();
+        bool hasAPair = HandWithTwoPairs.HasAPair();
         Assert.IsFalse(hasAPair);
     }
 
     [Test]
     public void GivenAHandWithThreeOfAKindAndAPairWhenCheckingForAFullHouseReturnTrue()
     {
-        bool hasAFullHouse = _handWithFullHouse.HasFullHouse();
+        bool hasAFullHouse = HandWithFullHouse.HasFullHouse();
         Assert.IsTrue(hasAFullHouse);
     }
 
     [Test]
     public void GivenAHandWithHighHandWhenCheckingForAFullHouseReturnFalse()
     {
-        bool hasAFullHouse = _handWithHighCard.HasFullHouse();
+        bool hasAFullHouse = HandWithHighCard.HasFullHouse();
         Assert.IsFalse(hasAFullHouse);
     }
 
     [Test]
     public void GivenAHandWithSimpleFlushWhenCheckingForASimpleFlushReturnTrue()
     {
-        bool hasASimpleFlush = _handWithSimpleFlush.HasASimpleFlush();
+        bool hasASimpleFlush = HandWithSimpleFlush.HasASimpleFlush();
         Assert.IsTrue(hasASimpleFlush);
     }
 
     [Test]
     public void GivenAHandWithoutSimpleFlushWhenCheckingForASimpleFlushReturnFalse()
     {
-        bool hasASimpleFlush = _handWithHighCard.HasASimpleFlush();
+        bool hasASimpleFlush = HandWithHighCard.HasASimpleFlush();
         Assert.IsFalse(hasASimpleFlush);
     }
 
     [Test]
     public void GivenAHandWithAStraightWhenCheckingForAStraightReturnTrue()
     {
-        bool hasAStraight = _handWithStraight.HasSimpleStraight();
+        bool hasAStraight = HandWithStraight.HasSimpleStraight();
         Assert.IsTrue(hasAStraight);
     }
 
     [Test]
     public void GivenAHandWithoutAStraightWhenCheckingForAStraightReturnFalse()
     {
-        bool hasAStraight = _handWithHighCard.HasSimpleStraight();
+        bool hasAStraight = HandWithHighCard.HasSimpleStraight();
         Assert.IsFalse(hasAStraight);
     }
 
@@ -232,7 +251,7 @@ public class Tests
     [Test]
     public void GivenAHandWithAStraightFlushWhenCheckingForAStraightReturnFalse()
     {
-        bool hasAStraight = _handWithStraightFlush.HasSimpleStraight();
+        bool hasAStraight = HandWithStraightFlush.HasSimpleStraight();
         Assert.IsFalse(hasAStraight);
     }
 
@@ -248,5 +267,46 @@ public class Tests
     {
         bool hasAStraight = _handWithAKindOfStraigthEndingWithtAce.HasSimpleStraight();
         Assert.IsFalse(hasAStraight);
+    }
+
+    [Test]
+    public void GiventAHandWithStaightFlushWhenCheckingForAStraightFlushReturnTrue()
+    {
+        bool hasStraightFlush = HandWithStraightFlush.HasStraightFlush();
+        Assert.IsTrue(hasStraightFlush);
+    }
+    
+    [Test]
+    public void GiventAHandWithStraightWhenCheckingForAStraightFlushReturnFalse()
+    {
+        bool hasStraightFlush = HandWithStraight.HasStraightFlush();
+        Assert.IsFalse(hasStraightFlush);
+    }
+    
+    [Test]
+    public void GiventAHandWithARoyalFlushWhenCheckingForARoyalFlushReturnTrue()
+    {
+        bool hasRoyalFLush = HandWithARoyalFlush.HasRoyalFLush();
+        Assert.IsTrue(hasRoyalFLush);
+    }
+    [Test]
+    public void GiventAHandWithoutARoyalFlushWhenCheckingForARoyalFlushReturnFalse()
+    {
+        bool hasRoyalFLush = HandWithStraight.HasRoyalFLush();
+        Assert.IsFalse(hasRoyalFLush);
+    }
+
+    [Test]
+    public void GivenAhandWithHighCardWhenCheckingForHighCardReturnTrue()
+    {
+        bool hasHighCard = HandWithHighCard.HasHighCard();
+        Assert.IsTrue(hasHighCard);
+    }
+    
+    [Theory]
+    public void GivenAHandWithAPairWhenCheckingForHighCardReturnFalse(PokerHand hand)
+    {
+        bool hasHighCard = hand.HasHighCard();
+        Assert.IsFalse(hasHighCard);
     }
 }
